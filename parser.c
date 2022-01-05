@@ -5,9 +5,7 @@
 
 #define MAXINDENTLENGHT 256     // maks długość identyfikatora
 
-void
-analizatorSkladni (char *inpname)
-{                               // przetwarza plik inpname
+void analizatorSkladni (char *inpname){                               // przetwarza plik inpname
 
   FILE *in = fopen (inpname, "r");
 
@@ -15,6 +13,12 @@ analizatorSkladni (char *inpname)
   int npar = 0;   // bilans nawiasów zwykłych ()
 
   alex_init4file (in);          // ustaw analizator leksykalny, aby czytał in
+
+	stack_t stack = malloc(sizeof(stack_t));
+        stack->top = -1;
+        stack->capacity = 2;
+        stack->nums = (int*)malloc(sizeof(int) * stack->capacity);
+        stack->names = (char**)malloc(sizeof(char*) * stack->capacity);
 
   lexem_t lex;
 
@@ -26,7 +30,7 @@ analizatorSkladni (char *inpname)
         lexem_t nlex = alex_nextLexem ();
         if (nlex == OPEPAR) {   // nawias otwierający - to zapewne funkcja
           npar++;
-          put_on_fun_stack (npar, iname);       // odłóż na stos funkcji
+          put_on_fun_stack (npar, iname, stack);       // odłóż na stos funkcji
                                                 // stos f. jest niezbędny, aby poprawnie obsłużyć sytuacje typu
                                                 // f1( 5, f2( a ), f3( b ) )
         }
@@ -40,16 +44,16 @@ analizatorSkladni (char *inpname)
       npar++;
       break;
     case CLOPAR:{              // zamykający nawias - to może być koniec prototypu, nagłówka albo wywołania
-        if (top_of_funstack () == npar) {       // sprawdzamy, czy liczba nawiasów bilansuje się z wierzchołkiem stosu funkcji
+        if (top_of_fun_stack (stack) == npar) {       // sprawdzamy, czy liczba nawiasów bilansuje się z wierzchołkiem stosu funkcji
                                                 // jeśli tak, to właśnie wczytany nawias jest domknięciem nawiasu otwartego
                                                 // za identyfikatorem znajdującym się na wierzchołku stosu
           lexem_t nlex = alex_nextLexem ();     // bierzemy nast leksem
           if (nlex == OPEBRA)   // nast. leksem to klamra a więc mamy do czynienia z def. funkcji
-            store_add_def (get_from_fun_stack (), alex_getLN (), inpname);
+            store_add_def (get_from_fun_stack (stack), alex_getLN (), inpname);
           else if (nbra == 0)   // nast. leksem to nie { i jesteśmy poza blokami - to musi być prototyp
-            store_add_proto (get_from_fun_stack (), alex_getLN (), inpname);
+            store_add_proto (get_from_fun_stack (stack), alex_getLN (), inpname);
           else                  // nast. leksem to nie { i jesteśmy wewnątrz bloku - to zapewne wywołanie
-            store_add_call (get_from_fun_stack (), alex_getLN (), inpname);
+            store_add_call (get_from_fun_stack (stack), alex_getLN (), inpname);
         }
         npar--;
       }

@@ -1,5 +1,5 @@
 #include "alex.h"
-
+#include <string.h>
 #include <ctype.h>
 
 static int  ln= 0;
@@ -11,7 +11,14 @@ void    alex_init4file( FILE *in ) {
    ci= in;
 }
 
-lexem_t alex_nextLexem( void ) {
+int isKeyword (char* word){
+	char keyword[23][10]={"double","int","struct","break","else","long","switch","case","enum","typedef","char","return","const","float","continue","for","void","default","sizeof","do","if","static","while"};
+	for (int i=0; i<23; i++) 
+		if (strcmp(word, keyword[i]) == 0) return 1;
+	return 0;
+}
+
+lexem_t alex_nextLexem( ) {
   int c;
   while( (c= fgetc(ci)) != EOF ) {
     if( isspace( c ) )
@@ -31,24 +38,17 @@ lexem_t alex_nextLexem( void ) {
       ident[0] = c;
       while( isalnum( c= fgetc(ci) ) )
                                 ident[i++] = c;
-                        ident[i] = '\0';
+      ident[i] = '\0';
       return isKeyword(ident) ? OTHER : IDENT;
-                } else if( c == '"' ) {
-      /* Uwaga: tu trzeba jeszcze poprawic obsluge nowej linii w trakcie napisu
-         i \\ w napisie 
-      */
-      int cp = c;
-                        while( (c= fgetc(ci)) != EOF && c != '"' && cp == '\\' ) {
-                                cp = c;
-      }
-      return c==EOF ? EOFILE : OTHER; 
-    } else if( c == '/' ) {
-      /* moze byc komentarz */
-                } if( isdigit( c ) || c == '.' ) {
-      /* liczba */
-                } else {
+                } 
+     else if( c == '"' ) {
+     	int cp = c;
+	while( (c= fgetc(ci)) != EOF && c != '"' )
+        	cp = c;
+	return c==EOF ? EOFILE : OTHER; 
+    } 
+    else if( c == '/' )
       return OTHER;
-                }
         }       
   return EOFILE;
 }
