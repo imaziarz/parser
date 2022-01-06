@@ -2,11 +2,11 @@
 #include <string.h>
 #include <ctype.h>
 
-static int  ln= 0;
+static int ln = 0;
 static char ident[256];
-static FILE *ci= NULL;
+static FILE *ci = NULL;
 
-void    alex_init4file( FILE *in ) {
+void alex_init4file( FILE *in ) {
    ln= 0;
    ci= in;
 }
@@ -53,11 +53,11 @@ lexem_t alex_nextLexem( ) {
   return EOFILE;
 }
 
-char *  alex_ident( void ) {
-   return ident;
+char *alex_ident( void ) {
+  return ident;
 }
 
-int     alex_getLN() {
-        return ln;
+int alex_getLN() {
+  return ln;
 }
 

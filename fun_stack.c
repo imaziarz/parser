@@ -1,12 +1,10 @@
 #include "fun_stack.h"
 #include <stdio.h>
 #include <stdlib.h>
-#define maxsize 1024
 
 int top_of_fun_stack ( funstack_t stack ){
 	return stack->nums[stack->top];
 }
-
 
 void put_on_fun_stack (int par_level, char* funame, funstack_t stack){
 	if (stack->top == stack->capacity-1){
@@ -33,7 +31,7 @@ void put_on_fun_stack (int par_level, char* funame, funstack_t stack){
 
 char* get_from_fun_stack ( funstack_t stack ){
 	if (stack->top == -1){
-		fprintf(stderr, "Stack underflow\n");
+		fprintf(stderr, "stos pusty, nie mozna zdjac elementu\n");
 		exit(1);
 	}
 	char* funame = stack->names[stack->top];

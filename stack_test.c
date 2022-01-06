@@ -3,14 +3,14 @@
 #include <stdlib.h>
 #include <time.h>
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
 	int i, t;
 	char* str = "test";
-	funstack_t stack = malloc(sizeof(stack_t));
+	funstack_t stack = malloc(sizeof(*stack));
         stack->top = -1;
         stack->capacity = 2;
-        stack->nums = (int*)malloc(sizeof(int) * stack->capacity);
-        stack->names = (char**)malloc(sizeof(char*) * stack->capacity);
+        stack->nums = malloc(sizeof(int) * stack->capacity);
+        stack->names = malloc(sizeof(char*) * stack->capacity);
 	
 	if (argc == 1){
 		srand(time(NULL));
@@ -19,24 +19,24 @@ int main(int argc, char** argv){
 	else
 		t = atoi(argv[1]);
 	
-	switch (t){
+	switch (t) {
 		case 0: 
 			printf("test: przepelnienie stosu\n");
-			for (i=0; i<1025; i++)
+			for (i = 0; i <= maxsize; i++)
 				put_on_fun_stack (i, str, stack);
-			for (i=0; i<1025; i++){
+			for (i = 0; i <= maxsize; i++){
 				printf("para: %d", top_of_fun_stack( stack ));
 				printf(", %s\n", get_from_fun_stack( stack ));
 			}
 			break;
 		case 1:
 			printf("test: maksymalne zapelnienie stosu\n");
-			for (i=0; i<1024; i++)
-                                put_on_fun_stack (i, str, stack);
-                        for (i=0; i<1024; i++){
-                                printf("para: %d", top_of_fun_stack( stack ));
-                                printf(", %s\n", get_from_fun_stack( stack ));
-                        }
+			for (i=0; i < maxsize; i++)
+			put_on_fun_stack (i, str, stack);
+			for (i=0; i < maxsize; i++){
+					printf("para: %d", top_of_fun_stack( stack ));
+					printf(", %s\n", get_from_fun_stack( stack ));
+				}
 			break;
 		case 2:
 			printf("test: zabranie elementu ze stosu pustego\n");
