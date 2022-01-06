@@ -3,12 +3,12 @@
 #include <stdlib.h>
 #define maxsize 1024
 
-int top_of_fun_stack ( stack_t stack ){
+int top_of_fun_stack ( funstack_t stack ){
 	return stack->nums[stack->top];
 }
 
 
-void put_on_fun_stack (int par_level, char* funame, stack_t stack){
+void put_on_fun_stack (int par_level, char* funame, funstack_t stack){
 	if (stack->top == stack->capacity-1){
 		if (stack->capacity == maxsize){
 			fprintf(stderr, "Stack overflow\n");
@@ -31,7 +31,7 @@ void put_on_fun_stack (int par_level, char* funame, stack_t stack){
 	stack->names[stack->top] = funame;
 }
 
-char* get_from_fun_stack ( stack_t stack ){
+char* get_from_fun_stack ( funstack_t stack ){
 	if (stack->top == -1){
 		fprintf(stderr, "Stack underflow\n");
 		exit(1);

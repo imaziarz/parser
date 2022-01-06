@@ -6,11 +6,11 @@ typedef struct Stack{
         int capacity;
         int* nums;
         char** names;
-}*stack_t;
+}*funstack_t;
 
-int top_of_fun_stack( stack_t stack );  // zwraca par_level - "zagłębienie nawiasowe" przechowywane na szczycie
-void put_on_fun_stack( int par_level, char *funame, stack_t stack ); // odkłada na stos parę (funame,par_level)
-char *get_from_fun_stack( stack_t stack ); // usuwa z wierzchołka parę (funame,par_level), zwraca zdjętą funame
+int top_of_fun_stack( funstack_t stack );  // zwraca par_level - "zagłębienie nawiasowe" przechowywane na szczycie
+void put_on_fun_stack( int par_level, char *funame, funstack_t stack ); // odkłada na stos parę (funame,par_level)
+char *get_from_fun_stack( funstack_t stack ); // usuwa z wierzchołka parę (funame,par_level), zwraca zdjętą funame
 
 #endif
 

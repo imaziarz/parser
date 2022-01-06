@@ -6,7 +6,7 @@
 int main(int argc, char** argv){
 	int i, t;
 	char* str = "test";
-	stack_t stack = malloc(sizeof(stack_t));
+	funstack_t stack = malloc(sizeof(stack_t));
         stack->top = -1;
         stack->capacity = 2;
         stack->nums = (int*)malloc(sizeof(int) * stack->capacity);
